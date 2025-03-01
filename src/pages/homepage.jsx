@@ -116,7 +116,7 @@ function Transfer({ onClose }) {
                 <div className="flex items-center self-start w-[350px] justify-between py-[15px]">
                     <p className="font-medium text-[13px]">Transaction Status</p>
                     <img 
-                        className="w-[16px] cursor-pointer h-[16px] cursor-pointer" 
+                        className="w-[16px]  h-[16px] cursor-pointer" 
                         src={cancel} 
                         alt="close icon" 
                         onClick={onClose}
