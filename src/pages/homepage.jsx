@@ -21,7 +21,7 @@ function Homepage() {
             )}
             <Header />
             <div className="bg-heropattern w-full h-[435px] flex-col flex items-center">
-                <div className="flex items-center w-full mt-[140px] justify-between px-[50px]">
+                <div className="flex items-center w-full mt-[130px] justify-between px-[75px]">
                     <Balance />
                     <div className="flex items-center gap-[20px]">
                         <Analytics />
@@ -31,7 +31,7 @@ function Homepage() {
                         <AddCash />
                     </div>
                 </div>
-            <div className="self-start mt-[20px] px-[50px] ">
+            <div className="self-start mt-[20px] px-[75px] ">
             <Overview />
             </div>
 
