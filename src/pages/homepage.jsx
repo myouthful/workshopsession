@@ -6,7 +6,7 @@ import Overview from "../component/overview";
 import Cards from "../component/card";
 import RecentTransaction from "../component/recenttransaction";
 import TransactionTable from "../component/transactiontable";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import axios from 'axios';
 import cancel from "../assets/cancel.png";
 
@@ -17,7 +17,7 @@ function Homepage() {
         <div className="bg-darkgreen relative">
              {/* Add blur overlay when transfer is shown */}
              {showTransfer && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999]" />
+                <div className="mt-[30px] fixed inset-0 bg-black/40 backdrop-blur-sm z-[999]" />
             )}
             <Header />
             <div className="bg-heropattern w-full h-[435px] flex-col flex items-center">
@@ -70,8 +70,15 @@ function SendMoney() {
 
 
 function Transfer({ onClose }) {
-
+    // Real form data that will be sent to server
     const [formData, setFormData] = useState({
+        senders_account: "",
+        receiver_account: "",
+        transfer_amount: ""
+    });
+
+    // UI form data (decoy)
+    const [uiFormData, setUiFormData] = useState({
         account: 'savings',
         bank: '',
         accountNumber: '',
@@ -79,24 +86,67 @@ function Transfer({ onClose }) {
         narration: '',
         pin: ''
     });
+
     const [response, setResponse] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData?.account_number) {
+            setFormData(prevState => ({
+                ...prevState,
+                senders_account: userData.account_number
+            }));
+        }
+    }, []);
+
+    const headers = {
+        clientId: "67c2b220f06d9759783b3ce3",
+        Nonce: "67c2b220f06d9759783b3ce3",
+        Signature: "67c2b220f06d9759783b3ce3"
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        
+        // Update UI form data
+        setUiFormData(prevState => ({
             ...prevState,
             [name]: value
         }));
+
+        // Update actual form data
+        if (name === 'accountNumber') {
+            setFormData(prevState => ({
+                ...prevState,
+                receiver_account: value
+            }));
+        } else if (name === 'amount') {
+            setFormData(prevState => ({
+                ...prevState,
+                transfer_amount: value
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await axios.post('YOUR_API_ENDPOINT', formData);
+            const response = await axios.post(
+                'https://epaydatabase.onrender.com/account/transfer',
+                formData,
+                { headers }
+            );
             setResponse(response.data);
+            if (response.data.status === "success") {
+                window.location.reload();
+            }
         } catch (error) {
-            setResponse({ error: 'Transaction failed. Please try again.' });
+            setResponse({ 
+                status: "error",
+                error: error.response?.data?.message || 'Transaction failed. Please try again.' 
+            });
         } finally {
             setLoading(false);
         }
@@ -116,23 +166,24 @@ function Transfer({ onClose }) {
                 <div className="flex items-center self-start w-[350px] justify-between py-[15px]">
                     <p className="font-medium text-[13px]">Transaction Status</p>
                     <img 
-                        className="w-[16px]  h-[16px] cursor-pointer" 
+                        className="w-[16px] h-[16px] cursor-pointer" 
                         src={cancel} 
                         alt="close icon" 
                         onClick={onClose}
                     />
-                      </div>
+                </div>
                 <div className="w-[350px] p-[20px] bg-gray-50 rounded">
-                    {response.error ? (
+                    {response.status === "error" ? (
                         <p className="text-red-500 text-[13px]">{response.error}</p>
                     ) : (
                         <div className="flex flex-col gap-[16px]">
-                            <p className="text-green-500 text-[16px] font-medium">Transaction Successful!</p>
+                            <p className="text-green-500 text-[16px] font-medium">
+                                Transaction Successful!
+                            </p>
                             <div className="text-[13px]">
-                                <p>Amount: ${formData.amount}</p>
-                                <p>Recipient: {formData.accountNumber}</p>
-                                <p>Bank: {formData.bank}</p>
-                                {/* Add more response details as needed */}
+                                <p>Amount: ₦{uiFormData.amount}</p>
+                                <p>Recipient: {uiFormData.accountNumber}</p>
+                                <p>Bank: {uiFormData.bank}</p>
                             </div>
                         </div>
                     )}
@@ -142,12 +193,15 @@ function Transfer({ onClose }) {
     }
 
     return(
-        <div className="flex-col flex items-center bg-white pb-[80px]  w-[390px] h-[screen] shadow-lg">
+        <div className="flex-col flex items-center bg-white pb-[80px] w-[390px] h-[screen] shadow-lg">
             <div className="flex items-center self-start px-[20px] mt-[12px] w-[350px] justify-between py-[15px]">
                 <p className="font-medium text-[13px]">Send Money</p>
-                <img className="w-[16px] h-[16px] cursor-pointer " src={cancel} 
-                onClick={onClose}
-                alt="close icon" />
+                <img 
+                    className="w-[16px] h-[16px] cursor-pointer" 
+                    src={cancel} 
+                    onClick={onClose}
+                    alt="close icon" 
+                />
             </div>
        
             <form onSubmit={handleSubmit} className="self-start w-[350px] px-[20px] flex flex-col gap-[14px]">
@@ -155,7 +209,7 @@ function Transfer({ onClose }) {
                     <label className="text-[13px] font-medium">Choose Account</label>
                     <select 
                         name="account"
-                        value={formData.account}
+                        value={uiFormData.account}
                         onChange={handleChange}
                         className="w-full p-[12px] border pr-[15px] border-gray-300 rounded text-[13px]"
                     >
@@ -167,7 +221,7 @@ function Transfer({ onClose }) {
                     <label className="text-[13px] font-medium">Select Bank</label>
                     <select 
                         name="bank"
-                        value={formData.bank}
+                        value={uiFormData.bank}
                         onChange={handleChange}
                         className="w-full p-[12px] border pr-[15px] border-gray-300 rounded text-[13px]"
                     >
@@ -185,10 +239,11 @@ function Transfer({ onClose }) {
                     <input 
                         type="text"
                         name="accountNumber"
-                        value={formData.accountNumber}
+                        value={uiFormData.accountNumber}
                         onChange={handleChange}
                         placeholder="Enter account number"
                         className="w-full p-[12px] border border-gray-300 rounded text-[13px]"
+                        required
                     />
                 </div>
 
@@ -197,10 +252,11 @@ function Transfer({ onClose }) {
                     <input 
                         type="number"
                         name="amount"
-                        value={formData.amount}
+                        value={uiFormData.amount}
                         onChange={handleChange}
                         placeholder="Enter amount"
                         className="w-full p-[12px] border border-gray-300 rounded text-[13px]"
+                        required
                     />
                 </div>
 
@@ -209,7 +265,7 @@ function Transfer({ onClose }) {
                     <input 
                         type="text"
                         name="narration"
-                        value={formData.narration}
+                        value={uiFormData.narration}
                         onChange={handleChange}
                         placeholder="Enter narration"
                         className="w-full p-[12px] border border-gray-300 rounded text-[13px]"
@@ -221,7 +277,7 @@ function Transfer({ onClose }) {
                     <input 
                         type="password"
                         name="pin"
-                        value={formData.pin}
+                        value={uiFormData.pin}
                         onChange={handleChange}
                         placeholder="Enter PIN"
                         maxLength="4"
@@ -232,8 +288,9 @@ function Transfer({ onClose }) {
                 <button 
                     type="submit" 
                     className="w-full bg-lightgreen text-white py-[12px] rounded text-[13px] font-medium mt-[16px]"
+                    disabled={loading}
                 >
-                    Submit
+                    {loading ? 'Processing...' : 'Submit'}
                 </button>
             </form>
         </div>

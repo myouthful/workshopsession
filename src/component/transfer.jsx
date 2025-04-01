@@ -4,12 +4,22 @@ import cancel from "../assets/cancel.png";
 
 function Transfer() {
     const [formData, setFormData] = useState({
-        senders_account: "0009871097", // Hardcoded for now
+        senders_account: "", // Hardcoded for now
         receiver_account: "",
         transfer_amount: ""
     });
     const [response, setResponse] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData?.account_number) {
+            setFormData(prevState => ({
+                ...prevState,
+                senders_account: userData.account_number
+            }));
+        }
+    }, []);
 
     const headers = {
         clientId: "67c2b220f06d9759783b3ce3",

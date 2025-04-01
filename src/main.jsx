@@ -6,11 +6,13 @@ import './index.css'
 import Homepage from './pages/homepage'
 import TransferPage from './pages/Transferpage'
 import SignIn from './pages/signinpage'
+import SignUpPage from './pages/signup'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        <Route path="/signup" element={<SignUpPage />} />
         <Route path='/' element={<SignIn />} />
         <Route path="/dashboard" element={<Homepage />} />
         <Route path="/transfer" element={<TransferPage />} />

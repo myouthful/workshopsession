@@ -13,8 +13,12 @@ export default {
             darkgreen: "#152F00",
             mustardyellow:"#E0AE24",
             brown: "#5D4E2C",
-            lightgreen:"#A1E96F"
+            lightgreen:"#A1E96F",
+            'button-blue': '#0066ff',
         },
+      width: {
+        'form': '400px',
+      },
         backgroundImage: {
           'heropattern': "url('/src/assets/bg.svg')",
         },

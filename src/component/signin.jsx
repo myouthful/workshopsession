@@ -1,82 +1,131 @@
-import * as React from 'react';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { SignInPage } from '@toolpad/core/SignInPage';
-import { useTheme, createTheme } from '@mui/material/styles';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-const customTheme = createTheme({
-  typography: {
-    fontFamily: '"Open Sans", sans-serif',
-    fontSize: 14,
-  },
-  palette: {
-    primary: {
-      main: '#A1E96F',
-    },
-  },
-});
-
-const providers = [{ id: 'credentials', name: 'Email and password' }];
-
-const signIn = async (provider, formData) => {
-  try {
-    const email = formData?.get('email');
-    const password = formData?.get('password');
-
-    const response = await axios.post('https://epaydatabase.onrender.com/login', {
-      email,
-      password
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // If login successful
-    if (response.data.message === 'Login successful') {
-      // Redirect to dashboard
-      window.location.href = '/dashboard';
-      
-      return {
-        type: 'CredentialsSignin',
-        success: true,
-        data: response.data
-      };
-    }
-
-  } catch (error) {
-    return {
-      type: 'CredentialsSignin',
-      error: error.response?.data?.message || 'Login failed'
-    };
-  }
-};
-
-export default function SignInpage() {
-  const theme = useTheme();
-  const mergedTheme = createTheme({
-    ...customTheme,
-    ...theme
+const SignInComponent = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
   });
 
-  return (
-    <AppProvider theme={mergedTheme}>
-      <SignInPage
-        signIn={signIn}
-        providers={providers}
-        slotProps={{ 
-          emailField: { autoFocus: false }, 
-          form: { noValidate: true },
-          submitButton: {
-            sx: {
-              backgroundColor: '#152F00',
-              '&:hover': {
-                backgroundColor: '#7cb342'
-              }
-            }
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        'https://epaydatabase.onrender.com/login',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'clientid': '67c2b220f06d9759783b3ce3',
+            'nonce': '67c2b220f06d9759783b3ce3',
+            'signature': '67c2b220f06d9759783b3ce3'
           }
-        }}
-      />
-    </AppProvider>
+        }
+      );
+  
+      if (response.data.status === 'success') {
+        // Save user data to localStorage
+        localStorage.setItem('userData', JSON.stringify({
+          account_number: response.data.data.account_number,
+          first_name: response.data.data.first_name,
+          last_name: response.data.data.last_name
+        }));
+  
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const inputBaseClass = "w-[400px] border-b border-black pb-2 text-gray-600 focus:outline-none";
+
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="max-w-md w-full px-6">
+        <div className="text-center mb-12">
+          <h1 className="text-2xl font-semibold text-gray-800 mb-3">
+            Welcome Back
+          </h1>
+          <p className="text-gray-600">
+            Login, your funds are safely secured
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div>
+            <label className="text-sm text-gray-500 mb-2 block">
+              Email Address
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className={inputBaseClass}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-500 mb-2 block">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={inputBaseClass}
+              required
+            />
+          </div>
+
+          {error && (
+            <p className="text-red-600 text-center text-sm">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-2 px-4 bg-button-blue text-white rounded-md hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+
+          <div className="text-center">
+            <p className="text-gray-600">
+              Don't have an account?{' '}
+              <Link 
+                to="/signup" 
+                className="text-button-blue hover:text-blue-600 transition-colors font-medium"
+              >
+                Create Account
+              </Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
   );
-}
+};
+
+export default SignInComponent;

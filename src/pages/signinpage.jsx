@@ -1,12 +1,14 @@
 import Header from "../component/header";
-import SignInpage from "../component/signin";
+import SignInComponent from "../component/signin";
+
+
 
 function SignIn() {
     return(
-        <div>
-            <Header />
-            <SignInpage />
-        </div>
+        <>
+        <Header />
+        <SignInComponent />
+        </>
     )
 }
 

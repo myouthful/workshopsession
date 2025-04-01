@@ -5,9 +5,7 @@ function Balance() {
     const [balance, setBalance] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [firstname,setfirstname]= useState(null)
-
-   
+    const [firstname, setfirstname] = useState(null);
 
     const headers = {
         clientId: "67c2b220f06d9759783b3ce3",
@@ -17,15 +15,23 @@ function Balance() {
 
     useEffect(() => {
         const fetchBalance = async () => {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            
+            if (!userData?.account_number) {
+                setError('No account information found');
+                setLoading(false);
+                return;
+            }
+
             try {
                 const response = await axios.get('https://epaydatabase.onrender.com/account/balance', {
                     params: {
-                        account_number: "0009871097" // You might want to make this dynamic
+                        account_number: userData.account_number
                     },
                     headers: headers
                 });
                 setBalance(response.data.data.balance);
-                setfirstname(response.data.data.account_name);
+                setfirstname(userData.first_name); // Use first_name from localStorage
                 setLoading(false);
             } catch (error) {
                 setError('Failed to fetch balance');
