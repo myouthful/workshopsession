@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignInComponent = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -38,15 +39,13 @@ const SignInComponent = () => {
       );
   
       if (response.data.status === 'success') {
-        // Save user data to localStorage
         localStorage.setItem('userData', JSON.stringify({
           account_number: response.data.data.account_number,
           first_name: response.data.data.first_name,
           last_name: response.data.data.last_name
         }));
   
-        // Redirect to dashboard
-        window.location.href = '/dashboard';
+        navigate('/dashboard');
       }
     } catch (error) {
       setError(error.response?.data?.message || 'Login failed');
@@ -54,6 +53,7 @@ const SignInComponent = () => {
       setLoading(false);
     }
   };
+
   const inputBaseClass = "w-[400px] border-b border-black pb-2 text-gray-600 focus:outline-none";
 
   return (
