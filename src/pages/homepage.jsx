@@ -17,7 +17,7 @@ function Homepage() {
         <div className="bg-darkgreen relative">
              {/* Add blur overlay when transfer is shown */}
              {showTransfer && (
-                <div className="mt-[30px] fixed inset-0 bg-black/40 backdrop-blur-sm z-[999]" />
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[999]" />
             )}
             <Header />
             <div className="bg-heropattern w-full h-[435px] flex-col flex items-center">
@@ -139,9 +139,7 @@ function Transfer({ onClose }) {
                 { headers }
             );
             setResponse(response.data);
-            if (response.data.status === "success") {
-                window.location.reload();
-            }
+            // Remove the window.location.reload()
         } catch (error) {
             setResponse({ 
                 status: "error",
@@ -154,7 +152,7 @@ function Transfer({ onClose }) {
 
     if (loading) {
         return (
-            <div className="flex-col flex items-center justify-center bg-white w-[500px] h-[screen]">
+            <div className="h-[90px] flex-col flex items-center justify-center bg-white w-[500px]">
                 <p className="text-[13px] font-medium">Processing transaction...</p>
             </div>
         );
@@ -191,7 +189,7 @@ function Transfer({ onClose }) {
             </div>
         );
     }
-
+    
     return(
         <div className="flex-col flex items-center bg-white pb-[80px] w-[390px] h-[screen] shadow-lg">
             <div className="flex items-center self-start px-[20px] mt-[12px] w-[350px] justify-between py-[15px]">
