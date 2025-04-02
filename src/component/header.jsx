@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Header() {
     return(
-        <div className="fixed top-0 left-0 right-0 z-50 bg-darkgreen flex row items-center py-[8px] justify-between px-[20px] min-[900px]:px-[50px] w-full">
+        <div className="h-[60px] fixed top-0 left-0 right-0 z-50 bg-darkgreen flex row items-center py-[8px] justify-between px-[20px] min-[900px]:px-[50px] w-full">
             <Logo />
             <div className="hidden min-[900px]:block">
                 <Buttons />
