@@ -6,17 +6,23 @@ import { useNavigate } from 'react-router-dom';
 
 function Header() {
     return(
-        <div className="fixed top-0 left-0 right-0 z-50 bg-darkgreen flex row items-center py-[8px] justify-between px-[50px] w-full ">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-darkgreen flex row items-center py-[8px] justify-between px-[20px] min-[900px]:px-[50px] w-full">
             <Logo />
-            <Buttons />
-            <Features />
+            <div className="hidden min-[900px]:block">
+                <Buttons />
+            </div>
+            <div className="hidden min-[900px]:block">
+                <Features />
+            </div>
         </div>
     )
 }
 
 function Logo(){
     return(
-        <p className="font-opensans text-6 font-semibold text-mustardyellow "> E-Pay Finance</p>
+        <p className="font-opensans text-[16px] min-[900px]:text-[18px] font-semibold text-mustardyellow"> 
+            E-Pay Finance
+        </p>
     )
 }
 

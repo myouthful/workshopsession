@@ -465,10 +465,10 @@ const SignUp = () => {
       ) : (
         <div className="max-w-2xl mx-auto px-4 min-[650px]:px-4 py-8 min-[650px]:py-16">
           <div className="flex flex-col items-center">
-            <p className="text-[14px] min-[300px]:mt-[70px] min-[300px]:ml-[11%] min-[900px]:ml-[110px] min-[650px]:text-[19px] self-start min-[650px]:ml-[120px] mt-[30px] min-[650px]:mt-[90px] mb-3 font-opensans font-medium px-2">
+          <p className="mt-[70px] font-opensans font-semibold mb-5 ">
               Create Your Account in Three Easy Steps!
             </p>
-            <div className="w-[280px] min-[650px]:w-[400px]">
+            <div className="w-[315px]  min-[650px]:w-[400px]">
               <form onSubmit={(e) => e.preventDefault()} className="px-0">
                 {renderStep()}
                 {error && (
