@@ -149,9 +149,9 @@ const SignUp = () => {
 
   // Add Success Card component
   const SuccessCard = () => (
-    <div className="min-h-screen bg-white flex items-center justify-center">
-      <div className="w-[400px] bg-white p-8 rounded-lg shadow-lg text-center">
-        <svg 
+    <div className="min-h-screen bg-white flex items-center justify-center px-4 md:px-0">
+    <div className="w-[280px] min-[650px]:w-[400px] bg-white p-4 md:p-8 rounded-lg shadow-lg text-center">
+      <svg 
           className="w-16 h-16 text-green-500 mx-auto mb-4" 
           fill="none" 
           stroke="currentColor" 
@@ -164,12 +164,12 @@ const SignUp = () => {
             d="M5 13l4 4L19 7"
           />
         </svg>
-        <h2 className="text-2xl font-opensans font-semibold text-gray-800 mb-4">
-          Account Creation Successful!
-        </h2>
-        <p className="text-gray-600 font-opensans text-[13px] font-thin mb-6">
-          Please check your email inbox for account details and login info.
-        </p>
+        <h2 className="text-xl md:text-2xl font-opensans font-semibold text-gray-800 mb-4">
+        Account Creation Successful!
+      </h2>
+      <p className="text-gray-600 font-opensans text-[12px] md:text-[13px] font-thin mb-6">
+        Please check your email inbox for account details and login info.
+      </p>
         <div className="bg-gray-50 p-4 rounded-md text-left">
           <p className="text-sm text-gray-600 mb-2">
             <span className="font-medium font-opensans ">Account Number:</span> {successData.account_number}
@@ -188,11 +188,11 @@ const SignUp = () => {
   const progressPercentage = ((step - 1) / 7) * 100;
 
   const StepHeader = ({ stepNumber }) => (
-    <div className="w-[90px] mb-[60px] ">
-      <h2 className="text-[14px] text-gray-600 font-semibold mb-2">
+    <div className="w-[70px] mb-[30px] min-[650px]:mb-[60px]">
+      <h2 className="text-[12px] min-[650px]:text-[14px] text-gray-600 font-semibold mb-2">
         Step {stepNumber} of 3
       </h2>
-      <div className="w-full bg-gray-200 h-1 mb-8 rounded-full overflow-hidden">
+      <div className="w-full bg-gray-200 h-1 mb-4 min-[650px]:mb-8 rounded-full overflow-hidden">
         <div
           className="bg-button-blue h-full rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progressPercentage}%` }}
@@ -201,16 +201,15 @@ const SignUp = () => {
     </div>
   );
 
-  const inputBaseClass =
-    "w-[400px] border-b border-black pb-2 text-gray-600 focus:outline-none";
+  const inputBaseClass = "w-full md:w-[400px] border-b border-black pb-2 text-gray-600 focus:outline-none";
 
   const NavigationButtons = ({ disableNext, isLastStep }) => (
-    <div className="flex justify-between w-[400px] mt-[100px]">
-      {step > 1 && (
+    <div className="flex justify-between w-[280px] min-[650px]:w-[400px] mt-[50px] min-[650px]:mt-[100px]">
+    {step > 1 && (
         <button
           onClick={handlePrevious}
           type="button"
-          className="px-8 py-2 text-button-blue border border-button-blue rounded-md hover:bg-gray-50 transition-colors"
+          className="px-4 min-[650px]:px-8 py-2 text-button-blue border border-button-blue rounded-md hover:bg-gray-50 transition-colors text-sm min-[650px]:text-base"
         >
           Previous
         </button>
@@ -218,16 +217,12 @@ const SignUp = () => {
       <button
         onClick={isLastStep ? handleSubmit : handleNext}
         type="button"
-        className={`px-8 py-2  bg-button-blue text-white rounded-md hover:bg-blue-600 transition-colors ${
+        className={`px-4 min-[650px]:px-8 py-2 bg-button-blue text-white rounded-md hover:bg-blue-600 transition-colors text-sm min-[650px]:text-base ${
           !step > 1 ? "ml-0" : "ml-auto"
         }`}
         disabled={disableNext}
       >
-        {isLastStep
-          ? loading
-            ? "Creating Account..."
-            : "Create Account"
-          : "Next"}
+        {isLastStep ? loading ? "Creating Account..." : "Create Account" : "Next"}
       </button>
     </div>
   );
@@ -465,26 +460,26 @@ const SignUp = () => {
 
   return (
     <div className="min-h-screen bg-white">
-    {successData ? (
-      <SuccessCard />
-    ) : (
-      <div className="max-w-2xl mx-auto px-4 py-16">
-        <div className="flex flex-col items-center">
-          <p className="self-start ml-[120px] mt-[90px] mb-3 font-opensans font-medium text-[19px]">
-            Create Your Account in Three Easy Steps!
-          </p>
-          <div className="w-[400px]">
-            <form onSubmit={(e) => e.preventDefault()}>
-              {renderStep()}
-              {error && (
-                <p className="text-red-600 text-center mt-4">{error}</p>
-              )}
-            </form>
+      {successData ? (
+        <SuccessCard />
+      ) : (
+        <div className="max-w-2xl mx-auto px-4 min-[650px]:px-4 py-8 min-[650px]:py-16">
+          <div className="flex flex-col items-center">
+            <p className="text-[14px] min-[300px]:mt-[70px] min-[300px]:ml-[11%] min-[900px]:ml-[110px] min-[650px]:text-[19px] self-start min-[650px]:ml-[120px] mt-[30px] min-[650px]:mt-[90px] mb-3 font-opensans font-medium px-2">
+              Create Your Account in Three Easy Steps!
+            </p>
+            <div className="w-[280px] min-[650px]:w-[400px]">
+              <form onSubmit={(e) => e.preventDefault()} className="px-0">
+                {renderStep()}
+                {error && (
+                  <p className="text-red-600 text-center mt-4 text-sm">{error}</p>
+                )}
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
+      )}
+    </div>
   );
 };
 
