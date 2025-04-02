@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import loginlockicon from "../assets/loginlockicon.png";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
@@ -465,9 +466,12 @@ const SignUp = () => {
       ) : (
         <div className="max-w-2xl mx-auto px-4 min-[650px]:px-4 py-8 min-[650px]:py-16">
           <div className="flex flex-col items-center">
-          <p className="mt-[70px] font-opensans font-semibold mb-5 ">
+          <p className="mt-[70px]  text-[16px] font-opensans font-semibold mb-5 ">
               Create Your Account in Three Easy Steps!
             </p>
+            <div>
+                 < img src={loginlockicon} className=" " alt="login icon" />
+            </div>
             <div className="w-[315px]  min-[650px]:w-[400px]">
               <form onSubmit={(e) => e.preventDefault()} className="px-0">
                 {renderStep()}

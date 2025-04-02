@@ -67,7 +67,7 @@ function Balance() {
             <p className="opensans font-medium text-[17px] text-white"> Hi, {firstname}</p>
             <p className="opensans font-thin text-[14px] text-white">Total Balance</p>
             <p className="opensans font-medium text-[22px] text-white">
-                N {balance?.toLocaleString()}
+            ₦‎ {balance?.toLocaleString()}
             </p>
         </div>
     );

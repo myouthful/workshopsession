@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import loginlockicon from "../assets/loginlockicon.png";
 
 const SignInComponent = () => {
   const navigate = useNavigate();
@@ -71,7 +72,8 @@ const SignInComponent = () => {
             Login, your funds are safely secured
           </p>
         </div>
-
+        <div>  
+        </div>
         <form onSubmit={handleSubmit} className="space-y-6 min-[650px]:space-y-8">
           <div>
             <label className="text-sm text-gray-500 mb-2 block">

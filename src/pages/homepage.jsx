@@ -229,6 +229,7 @@ function Transfer({ onClose }) {
                         <option value="zenithbank">Zenith Bank</option>
                         <option value="opay">Opay</option>
                         <option value="access">Access Bank</option>
+                        <option value="e-pay">E-PAY</option>
                     </select>
                 </div>
 
