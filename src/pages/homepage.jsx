@@ -74,7 +74,8 @@ function Transfer({ onClose }) {
     const [formData, setFormData] = useState({
         senders_account: "",
         receiver_account: "",
-        transfer_amount: ""
+        transfer_amount: "",
+        transfer_description
     });
 
     // UI form data (decoy)
@@ -125,6 +126,12 @@ function Transfer({ onClose }) {
             setFormData(prevState => ({
                 ...prevState,
                 transfer_amount: value
+            }));
+        }
+        else if (name === 'narration') {  // Add this condition
+            setFormData(prevState => ({
+                ...prevState,
+                transfer_description: value
             }));
         }
     };
