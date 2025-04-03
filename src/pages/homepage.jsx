@@ -75,7 +75,7 @@ function Transfer({ onClose }) {
         senders_account: "",
         receiver_account: "",
         transfer_amount: "",
-        transfer_description
+        transfer_description:""
     });
 
     // UI form data (decoy)
