@@ -166,7 +166,7 @@ function Transfer({ onClose }) {
     console.log('Sending data:', transferData); // Debug log
 
     const response = await axios.post(
-      "http://localhost:3000/account/transfer",
+      "https://epaydatabase.onrender.com/account/transfer",
       transferData,
       {
         headers: {
